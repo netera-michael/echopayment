@@ -45,25 +45,63 @@ const HomePage: React.FC = () => {
     setSelectedCurrency(currency);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (amount && selectedCurrency) {
       let conversionRate = 0;
+      let currencyCode = "";
       switch (selectedCurrency) {
         case 'AED':
           conversionRate = exchangeRates.AEDfx;
+          currencyCode = 'AED';
           break;
         case 'KWD':
           conversionRate = exchangeRates.KWDfx;
+          currencyCode = 'KWD';
           break;
         case 'SAR':
           conversionRate = exchangeRates.SARfx;
+          currencyCode = 'SAR';
           break;
       }
+  
       const conversionAmount = amount * conversionRate;
+      let amountInFils;
+      if (selectedCurrency === 'KWD') {
+        amountInFils = conversionAmount * 1000;
+      } else {
+        amountInFils = conversionAmount * 100;
+      }
+  
       toast(`Amount requested: ${amount}\nCurrency requested: ${selectedCurrency}\nConversion: ${conversionAmount}`);
+  
+      // API call to Ziina
+      const response = await fetch('https://api-v2.ziina.com/api/payment_intent', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${ziinaConfig.apiKey}`,
+        },
+        body: JSON.stringify({
+          amount: amountInFils,
+          currency_code: currencyCode,
+          message: "Payment for Echo Club",
+          success_url: "https://www.google.com",
+          cancel_url: "https://www.apple.com",
+          test: true
+        })
+      });
+  
+      const result = await response.json();
+      if (result.redirect_url) {
+        window.open(result.redirect_url, '_blank');
+      } else {
+        toast.error('Failed to create payment intent');
+      }
     }
   };
+  
 
   if (loading) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
