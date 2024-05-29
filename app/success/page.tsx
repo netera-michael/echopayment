@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import 'tailwindcss/tailwind.css';
 import { FaCheckCircle } from 'react-icons/fa';
 
 const SuccessPage: React.FC = () => {
