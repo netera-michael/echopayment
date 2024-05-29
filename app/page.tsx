@@ -96,7 +96,7 @@ const HomePage: React.FC = () => {
       if (result.redirect_url) {
         window.location.href = result.redirect_url;
       } else {
-        toast.error('Failed to create payment intent');
+        toast.error('Failed to create payment link');
       }
     }
   };
