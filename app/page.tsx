@@ -24,6 +24,7 @@ const HomePage: React.FC = () => {
     apiKey: "",
   });
   const [amount, setAmount] = useState<number | null>(null);
+  const [formattedAmount, setFormattedAmount] = useState<string>("");
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   useEffect(() => {
@@ -94,7 +95,7 @@ const HomePage: React.FC = () => {
           body: JSON.stringify({
             amount: amountInFils,
             currency_code: currencyCode,
-            message: "Payment for Echo Club",
+            message: `Payment amount of ${formattedAmount} to ECHO Prive`,
             success_url: "https://pay.echo-club.com/success",
             cancel_url: "https://pay.echo-club.com/failure",
             test: true,
@@ -110,6 +111,12 @@ const HomePage: React.FC = () => {
       }
     }
     setLoadingSubmit(false);
+  };
+
+  const handleAmountChange = (values: any) => {
+    const { value, formattedValue } = values;
+    setAmount(Number(value));
+    setFormattedAmount(formattedValue);
   };
 
   if (loading) {
@@ -142,10 +149,7 @@ const HomePage: React.FC = () => {
               placeholder="Amount"
               className="p-2 w-full border rounded-md text-black pr-12"
               inputMode="numeric"
-              onValueChange={(values) => {
-                const { value } = values;
-                setAmount(Number(value));
-              }}
+              onValueChange={handleAmountChange}
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
               EGP
