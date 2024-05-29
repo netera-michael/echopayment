@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import 'tailwindcss/tailwind.css';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { firebaseConfig } from './firebaseConfig'; // Adjust the import path as necessary
@@ -64,7 +63,7 @@ const HomePage: React.FC = () => {
           currencyCode = 'SAR';
           break;
       }
-  
+
       const conversionAmount = amount * conversionRate;
       let amountInFils;
       if (selectedCurrency === 'KWD') {
@@ -72,9 +71,9 @@ const HomePage: React.FC = () => {
       } else {
         amountInFils = conversionAmount * 100;
       }
-  
+
       toast(`Amount requested: ${amount}\nCurrency requested: ${selectedCurrency}\nConversion: ${conversionAmount}`);
-  
+
       // API call to Ziina
       const response = await fetch('https://api-v2.ziina.com/api/payment_intent', {
         method: 'POST',
@@ -92,7 +91,7 @@ const HomePage: React.FC = () => {
           test: true
         })
       });
-  
+
       const result = await response.json();
       if (result.redirect_url) {
         window.open(result.redirect_url, '_blank');
@@ -101,7 +100,6 @@ const HomePage: React.FC = () => {
       }
     }
   };
-  
 
   if (loading) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
