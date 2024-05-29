@@ -94,7 +94,7 @@ const HomePage: React.FC = () => {
 
       const result = await response.json();
       if (result.redirect_url) {
-        window.open(result.redirect_url, '_blank');
+        window.location.href = result.redirect_url;
       } else {
         toast.error('Failed to create payment intent');
       }
