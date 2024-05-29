@@ -13,7 +13,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const HomePage: React.FC = () => {
-  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>("SAR");
   const [loading, setLoading] = useState(true);
   const [exchangeRates, setExchangeRates] = useState({
     AEDfx: 0,
