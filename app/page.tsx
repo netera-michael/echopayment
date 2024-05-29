@@ -146,7 +146,7 @@ const HomePage: React.FC = () => {
               }}
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
-              EGP
+              EGPz
             </span>
           </div>
           <div className="flex justify-center space-x-4 mt-4">
