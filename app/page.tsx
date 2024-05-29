@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
         amountInFils = conversionAmount * 100;
       }
 
-      toast(`Amount requested: ${amount}\nCurrency requested: ${selectedCurrency}\nConversion: ${conversionAmount}`);
+      // toast(`Amount requested: ${amount}\nCurrency requested: ${selectedCurrency}\nConversion: ${conversionAmount}`);
 
       // API call to Ziina
       const response = await fetch('https://api-v2.ziina.com/api/payment_intent', {
