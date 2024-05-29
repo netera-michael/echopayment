@@ -86,8 +86,8 @@ const HomePage: React.FC = () => {
           amount: amountInFils,
           currency_code: currencyCode,
           message: "Payment for Echo Club",
-          success_url: "https://www.google.com",
-          cancel_url: "https://www.apple.com",
+          success_url: "https://pay.echo-club.com/success",
+          cancel_url: "https://pay.echo-club.com/failure",
           test: true
         })
       });
