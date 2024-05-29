@@ -7,6 +7,7 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig"; // Adjust the import path as necessary
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { NumericFormat } from "react-number-format";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -135,12 +136,14 @@ const HomePage: React.FC = () => {
         />
         <form onSubmit={handleSubmit} className="mt-4 space-y-4 w-full">
           <div className="relative">
-            <input
-              type="number"
+            <NumericFormat
+              thousandSeparator={true}
               placeholder="Amount"
               className="p-2 w-full border rounded-md text-black pr-12"
-              min="0"
-              onChange={(e) => setAmount(Number(e.target.value))}
+              onValueChange={(values) => {
+                const { value } = values;
+                setAmount(Number(value));
+              }}
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
               EGP
