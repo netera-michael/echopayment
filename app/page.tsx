@@ -140,13 +140,14 @@ const HomePage: React.FC = () => {
               thousandSeparator={true}
               placeholder="Amount"
               className="p-2 w-full border rounded-md text-black pr-12"
+              inputMode="numeric"
               onValueChange={(values) => {
                 const { value } = values;
                 setAmount(Number(value));
               }}
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
-              EGPz
+              EGP
             </span>
           </div>
           <div className="flex justify-center space-x-4 mt-4">
