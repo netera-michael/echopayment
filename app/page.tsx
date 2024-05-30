@@ -1,5 +1,4 @@
-"use client";   
-
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
@@ -14,7 +13,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const HomePage: React.FC = () => {
-  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>("SAR");
   const [loading, setLoading] = useState(true);
   const [exchangeRates, setExchangeRates] = useState({
     AEDfx: 0,
@@ -25,6 +24,8 @@ const HomePage: React.FC = () => {
     apiKey: "",
   });
   const [amount, setAmount] = useState<number | null>(null);
+  const [formattedAmount, setFormattedAmount] = useState<string>("");
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +55,7 @@ const HomePage: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoadingSubmit(true);
     if (amount && selectedCurrency) {
       let conversionRate = 0;
       let currencyCode = "";
@@ -80,8 +82,6 @@ const HomePage: React.FC = () => {
         amountInFils = conversionAmount * 100;
       }
 
-      // toast(`Amount requested: ${amount}\nCurrency requested: ${selectedCurrency}\nConversion: ${conversionAmount}`);
-
       // API call to Ziina
       const response = await fetch(
         "https://api-v2.ziina.com/api/payment_intent",
@@ -95,9 +95,9 @@ const HomePage: React.FC = () => {
           body: JSON.stringify({
             amount: amountInFils,
             currency_code: currencyCode,
-            message: "Payment for Echo Club",
-            success_url: "",
-            cancel_url: "",
+            message: `Payment amount of ${formattedAmount} to ECHO Prive`,
+            success_url: "https://pay.echo-club.com/success",
+            cancel_url: "https://pay.echo-club.com/failure",
             test: false,
           }),
         }
@@ -110,6 +110,13 @@ const HomePage: React.FC = () => {
         toast.error("Failed to create payment link");
       }
     }
+    setLoadingSubmit(false);
+  };
+
+  const handleAmountChange = (values: any) => {
+    const { value, formattedValue } = values;
+    setAmount(Number(value));
+    setFormattedAmount(formattedValue);
   };
 
   if (loading) {
@@ -141,13 +148,11 @@ const HomePage: React.FC = () => {
               thousandSeparator={true}
               placeholder="Amount"
               className="p-2 w-full border rounded-md text-black pr-12"
-              onValueChange={(values) => {
-                const { value } = values;
-                setAmount(Number(value));
-              }}
+              inputMode="numeric"
+              onValueChange={handleAmountChange}
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
-              EGPp
+              EGP
             </span>
           </div>
           <div className="flex justify-center space-x-4 mt-4">
@@ -200,8 +205,35 @@ const HomePage: React.FC = () => {
           <button
             type="submit"
             className="w-full px-4 py-2 font-bold text-black bg-white rounded-md hover:bg-gray-200"
+            disabled={loadingSubmit}
           >
-            Pay
+            {loadingSubmit ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 mr-3 -ml-1 text-black animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Processing...
+              </div>
+            ) : (
+              "Pay"
+            )}
           </button>
         </form>
       </div>
