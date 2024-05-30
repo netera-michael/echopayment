@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig"; // Adjust the import path as necessary
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -105,17 +105,6 @@ const HomePage: React.FC = () => {
 
       const result = await response.json();
       if (result.redirect_url) {
-        // Save the response to Firebase
-        await setDoc(doc(db, "payments", new Date().toISOString()), {
-          amount: amountInFils,
-          currency_code: currencyCode,
-          message: `Payment amount of ${formattedAmount} to ECHO Prive`,
-          success_url: result.success_url,
-          cancel_url: result.cancel_url,
-          redirect_url: result.redirect_url,
-          timestamp: new Date().toISOString(),
-        });
-
         window.location.href = result.redirect_url;
       } else {
         toast.error("Failed to create payment link");
