@@ -66,7 +66,7 @@ const HomePage: React.FC = () => {
           break;
         case "KWD":
           conversionRate = exchangeRates.KWDfx;
-          currencyCode = "KWD";
+          currencyCode = "USD";
           break;
         case "SAR":
           conversionRate = exchangeRates.SARfx;
@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
       const conversionAmount = amount * conversionRate;
       let amountInFils;
       if (selectedCurrency === "KWD") {
-        amountInFils = conversionAmount * 1000;
+        amountInFils = conversionAmount * 100;
       } else {
         amountInFils = conversionAmount * 100;
       }
